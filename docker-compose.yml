@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  vpn-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vpn-with-python
+    privileged: true
+    ports:
+      - "500:500/udp"
+      - "4500:4500/udp"
+      - "8000:8000"
+    command: sh -c "python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./ikev2-vpn-data:/etc/ipsec.d
+      - ./modules:/lib/modules:ro
+      - ./service:/service
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+
